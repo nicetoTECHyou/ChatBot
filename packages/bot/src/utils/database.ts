@@ -179,21 +179,20 @@ export class StreamForgeDB {
       this.seedDefaultProviders();
     }
 
-    // Auto-seed Twitch channel from .env if no channels exist
-    const channelCount = this.db.prepare('SELECT COUNT(*) as c FROM channels').get() as { c: number };
-    if (channelCount.c === 0) {
-      this.seedChannelFromEnv();
-    }
+    // Always sync Twitch channel from .env (update OAuth token if changed)
+    this.syncChannelsFromEnv();
   }
 
-  private seedChannelFromEnv(): void {
+  private syncChannelsFromEnv(): void {
     const twitchChannels = config.TWITCH_CHANNELS;
     const oauthToken = config.TWITCH_OAUTH_TOKEN;
+    const isPlaceholder = !oauthToken || oauthToken === 'oauth:your_twitch_token_here';
 
-    if (twitchChannels.length > 0 && oauthToken && oauthToken !== 'oauth:your_twitch_token_here') {
+    if (twitchChannels.length > 0 && !isPlaceholder) {
       const channelId = twitchChannels[0].toLowerCase().trim();
       const channelName = twitchChannels[0].toLowerCase().trim();
 
+      // upsertChannel uses ON CONFLICT DO UPDATE, so this updates existing channels too
       this.upsertChannel({
         channelId,
         channelName,
@@ -204,9 +203,9 @@ export class StreamForgeDB {
         activePersonaId: 'der-kritiker',
       });
 
-      logger.info(`Auto-seeded Twitch channel from .env: ${channelName}`);
+      logger.info(`Twitch channel synced from .env: ${channelName} (token: ${oauthToken.substring(0, 10)}...)`);
 
-      // Also seed additional channels if multiple are configured
+      // Also sync additional channels if multiple are configured
       for (let i = 1; i < twitchChannels.length; i++) {
         const ch = twitchChannels[i].toLowerCase().trim();
         if (ch) {
@@ -219,17 +218,28 @@ export class StreamForgeDB {
             enabled: true,
             activePersonaId: 'der-kritiker',
           });
-          logger.info(`Auto-seeded additional Twitch channel from .env: ${ch}`);
+          logger.info(`Additional Twitch channel synced from .env: ${ch}`);
         }
       }
     } else {
-      logger.warn('No Twitch channel configured in .env (TWITCH_CHANNELS / TWITCH_OAUTH_TOKEN)');
+      if (twitchChannels.length === 0) {
+        logger.warn('='.repeat(50));
+        logger.warn('  TWITCH_CHANNELS not set in .env!');
+        logger.warn('  Add: TWITCH_CHANNELS=your_channel_name');
+        logger.warn('='.repeat(50));
+      } else if (isPlaceholder) {
+        logger.warn('='.repeat(50));
+        logger.warn('  TWITCH_OAUTH_TOKEN not configured in .env!');
+        logger.warn('  Get your token at: https://twitchapps.com/tmi/');
+        logger.warn('  Add: TWITCH_OAUTH_TOKEN=oauth:xxxxxxxxxx');
+        logger.warn('='.repeat(50));
+      }
     }
 
-    // Seed Kick channel from .env if configured
+    // Sync Kick channel from .env if configured
     const kickChannels = config.KICK_CHANNELS;
     const kickToken = config.KICK_OAUTH_TOKEN;
-    if (kickChannels.length > 0 && kickToken) {
+    if (kickChannels.length > 0 && kickToken && kickToken !== 'your_kick_token_here') {
       const channelId = kickChannels[0].toLowerCase().trim();
       this.upsertChannel({
         channelId,
@@ -239,7 +249,7 @@ export class StreamForgeDB {
         enabled: true,
         activePersonaId: 'der-kritiker',
       });
-      logger.info(`Auto-seeded Kick channel from .env: ${kickChannels[0]}`);
+      logger.info(`Kick channel synced from .env: ${kickChannels[0]}`);
     }
   }
 

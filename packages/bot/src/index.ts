@@ -114,14 +114,18 @@ class StreamForgeBot {
     // Load channels from DB
     const channels = this.db.getChannels();
 
+    // Detailed channel diagnostics
+    logger.info(chalk.gray(`Found ${channels.length} channel(s) in database:`));
+    for (const ch of channels) {
+      const hasToken = !!ch.oauthToken && ch.oauthToken !== '';
+      logger.info(chalk.gray(`  - ${ch.channelName} (${ch.platform}) enabled=${ch.enabled} oauth=${hasToken ? String(ch.oauthToken).substring(0, 12) + '...' : 'MISSING'}`));
+    }
+
+    const twitchChannels = channels.filter(c => c.platform === 'twitch' && c.enabled && c.oauthToken);
     if (channels.length === 0) {
-      logger.warn(chalk.yellow(`
-  ⚠️  Keine Kanäle konfiguriert!
-  ℹ️  Bitte konfiguriere deinen ersten Kanal über das Admin Interface:
-  ℹ️  http://localhost:${config.ADMIN_PORT}
-  ℹ️  Benutzer: ${config.ADMIN_USERNAME}
-  ℹ️  Passwort: ${config.ADMIN_PASSWORD}
-      `));
+      logger.warn(chalk.yellow(`\n  Keine Kanaele konfiguriert!\n  Bitte konfiguriere deinen ersten Kanal ueber das Admin Interface:\n  http://localhost:${config.ADMIN_PORT}\n  Benutzer: ${config.ADMIN_USERNAME}\n  Passwort: ${config.ADMIN_PASSWORD}\n`));
+    } else if (twitchChannels.length === 0 && config.ENABLE_TWITCH) {
+      logger.warn(chalk.yellow(`\n  TWITCH WARNUNG: Keine Twitch-Kanaele mit OAuth-Token gefunden!\n  Bitte pruefe deine .env Datei:\n  - TWITCH_CHANNELS=dein_kanal_name\n  - TWITCH_OAUTH_TOKEN=oauth:dein_token (von https://twitchapps.com/tmi/)\n  Oder konfiguriere im Admin Panel: http://localhost:${config.ADMIN_PORT}\n`));
     }
 
     // Initialize persona manager with channels
@@ -130,13 +134,15 @@ class StreamForgeBot {
     this.questSystem.initialize(channelIds);
 
     // Connect to Twitch
-    if (config.ENABLE_TWITCH && channels.some(c => c.platform === 'twitch' && c.enabled)) {
+    if (config.ENABLE_TWITCH && twitchChannels.length > 0) {
       try {
         await this.twitchBot.connect(channels);
       } catch (error: any) {
         logger.error(chalk.red(`Twitch connection failed: ${error.message}`));
         logger.warn(chalk.yellow('You can configure Twitch in the Admin UI after startup.'));
       }
+    } else if (config.ENABLE_TWITCH) {
+      logger.warn(chalk.yellow('Twitch enabled but no channels with OAuth token - skipping connection.'));
     }
 
     // Connect to Kick

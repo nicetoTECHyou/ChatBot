@@ -38,7 +38,7 @@ export class TwitchBot extends EventEmitter {
     const enabledChannels = channels.filter(c => c.enabled && c.platform === 'twitch' && c.oauthToken);
 
     if (enabledChannels.length === 0) {
-      logger.warn('No enabled Twitch channels with OAuth token configured');
+      logger.warn('No enabled Twitch channels with OAuth token configured - cannot connect');
       return;
     }
 
