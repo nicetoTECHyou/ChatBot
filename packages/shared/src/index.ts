@@ -183,6 +183,7 @@ export interface ServerToClientEvents {
   'stats:update': (stats: StreamStats) => void;
   'ai:usage': (data: { provider: AIProvider; tokensUsed: number; latencyMs: number }) => void;
   'sentiment:update': (data: { score: number; type: SentimentType; messageCount: number }) => void;
+  'channels:updated': (channels: ChannelConfig[]) => void;
   'error': (data: { message: string; code: string }) => void;
 }
 

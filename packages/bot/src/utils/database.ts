@@ -178,6 +178,69 @@ export class StreamForgeDB {
       this.seedDefaultPersonas();
       this.seedDefaultProviders();
     }
+
+    // Auto-seed Twitch channel from .env if no channels exist
+    const channelCount = this.db.prepare('SELECT COUNT(*) as c FROM channels').get() as { c: number };
+    if (channelCount.c === 0) {
+      this.seedChannelFromEnv();
+    }
+  }
+
+  private seedChannelFromEnv(): void {
+    const twitchChannels = config.TWITCH_CHANNELS;
+    const oauthToken = config.TWITCH_OAUTH_TOKEN;
+
+    if (twitchChannels.length > 0 && oauthToken && oauthToken !== 'oauth:your_twitch_token_here') {
+      const channelId = twitchChannels[0].toLowerCase().trim();
+      const channelName = twitchChannels[0].toLowerCase().trim();
+
+      this.upsertChannel({
+        channelId,
+        channelName,
+        platform: 'twitch',
+        oauthToken,
+        clientId: config.TWITCH_CLIENT_ID,
+        enabled: true,
+        activePersonaId: 'der-kritiker',
+      });
+
+      logger.info(`Auto-seeded Twitch channel from .env: ${channelName}`);
+
+      // Also seed additional channels if multiple are configured
+      for (let i = 1; i < twitchChannels.length; i++) {
+        const ch = twitchChannels[i].toLowerCase().trim();
+        if (ch) {
+          this.upsertChannel({
+            channelId: ch,
+            channelName: ch,
+            platform: 'twitch',
+            oauthToken,
+            clientId: config.TWITCH_CLIENT_ID,
+            enabled: true,
+            activePersonaId: 'der-kritiker',
+          });
+          logger.info(`Auto-seeded additional Twitch channel from .env: ${ch}`);
+        }
+      }
+    } else {
+      logger.warn('No Twitch channel configured in .env (TWITCH_CHANNELS / TWITCH_OAUTH_TOKEN)');
+    }
+
+    // Seed Kick channel from .env if configured
+    const kickChannels = config.KICK_CHANNELS;
+    const kickToken = config.KICK_OAUTH_TOKEN;
+    if (kickChannels.length > 0 && kickToken) {
+      const channelId = kickChannels[0].toLowerCase().trim();
+      this.upsertChannel({
+        channelId,
+        channelName: kickChannels[0].toLowerCase().trim(),
+        platform: 'kick',
+        oauthToken: kickToken,
+        enabled: true,
+        activePersonaId: 'der-kritiker',
+      });
+      logger.info(`Auto-seeded Kick channel from .env: ${kickChannels[0]}`);
+    }
   }
 
   private seedDefaultPersonas(): void {

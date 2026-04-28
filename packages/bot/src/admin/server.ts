@@ -62,7 +62,7 @@ export function createAdminServer(
   app.get('/api/health', (_req, res) => {
     res.json({
       status: 'ok',
-      version: '0.2.0',
+      version: '0.2.3',
       twitch: { connected: twitchBot?.isConnected() || false },
       kick: { connected: kickBot?.isConnected() || false },
       uptime: process.uptime(),
@@ -74,19 +74,51 @@ export function createAdminServer(
     res.json(db.getChannels());
   });
 
-  app.post('/api/channels', (req, res) => {
+  app.post('/api/channels', async (req, res) => {
     const channel = req.body as ChannelConfig;
     if (!channel.channelId || !channel.channelName) {
       return res.status(400).json({ error: 'channelId and channelName required' });
     }
     db.upsertChannel(channel);
+
+    // Auto-reconnect bot when channel is added
+    try {
+      const allChannels = db.getChannels();
+      if (channel.platform === 'twitch' && twitchBot) {
+        await twitchBot.connect(allChannels);
+        logger.info(`Twitch reconnected after channel update`);
+      } else if (channel.platform === 'kick' && kickBot) {
+        await kickBot.connect(allChannels);
+        logger.info(`Kick reconnected after channel update`);
+      }
+    } catch (err: any) {
+      logger.error(`Auto-reconnect failed: ${err.message}`);
+    }
+
+    io.emit('channels:updated', db.getChannels());
     res.json({ success: true });
   });
 
-  app.put('/api/channels/:channelId/toggle', (req, res) => {
+  app.put('/api/channels/:channelId/toggle', async (req, res) => {
     const { channelId } = req.params;
     const { enabled } = req.body;
     db.enableChannel(channelId, enabled);
+
+    // Reconnect when channel is toggled
+    try {
+      const allChannels = db.getChannels();
+      if (twitchBot) {
+        await twitchBot.connect(allChannels);
+        logger.info(`Twitch reconnected after channel toggle`);
+      }
+      if (kickBot) {
+        await kickBot.connect(allChannels);
+      }
+    } catch (err: any) {
+      logger.error(`Auto-reconnect failed: ${err.message}`);
+    }
+
+    io.emit('channels:updated', db.getChannels());
     res.json({ success: true });
   });
 

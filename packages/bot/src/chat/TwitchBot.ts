@@ -42,6 +42,13 @@ export class TwitchBot extends EventEmitter {
       return;
     }
 
+    // Disconnect existing connection first
+    if (this.client) {
+      this.client.disconnect();
+      this.client = null;
+      this.connected = false;
+    }
+
     const channelNames = enabledChannels.map(c => c.channelName);
 
     // Use first channel's OAuth token (single token for bot account)
