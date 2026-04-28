@@ -105,7 +105,7 @@ export default function ChatPanel() {
                     <span className={`font-semibold text-xs ${
                       msg.isBot ? 'text-forge-purple-light' : 'text-blue-400'
                     }`}>
-                      {msg.isBot ? '⚔️ StreamForge' : msg.username}
+                      {msg.isBot ? '⚔️ nicetoAIyou' : msg.username}
                     </span>
                     <span className="text-[10px] text-forge-text-muted font-mono">
                       {formatTime(msg.timestamp)}

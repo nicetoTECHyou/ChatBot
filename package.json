@@ -1,7 +1,7 @@
 {
-  "name": "streamforge-ai",
+  "name": "nicetoaiyou-ai",
   "version": "0.2.0",
-  "description": "StreamForge AI - KI-gesteuerter Multi-Persona Chat-Bot für Twitch & Kick",
+  "description": "nicetoAIyou - KI-gesteuerter Multi-Persona Chat-Bot für Twitch & Kick",
   "private": true,
   "workspaces": [
     "packages/bot",
@@ -15,7 +15,7 @@
     "build": "npm run build --workspace=packages/shared && npm run build --workspace=packages/bot && npm run build --workspace=packages/admin",
     "start": "npm run start --workspace=packages/bot",
     "lint": "eslint packages/*/src --ext .ts,.tsx",
-    "docker:build": "docker build -t streamforge-ai:latest -f docker/Dockerfile .",
+    "docker:build": "docker build -t nicetoaiyou-ai:latest -f docker/Dockerfile .",
     "docker:up": "docker compose up -d",
     "docker:down": "docker compose down",
     "docker:logs": "docker compose logs -f"

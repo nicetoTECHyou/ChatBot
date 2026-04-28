@@ -1,5 +1,5 @@
 // ============================================================
-// StreamForge AI Bot - Admin API & Socket.IO Server
+// nicetoAIyou Bot - Admin API & Socket.IO Server
 // ============================================================
 
 import express from 'express';
@@ -9,16 +9,16 @@ import cors from 'cors';
 import path from 'path';
 import { logger } from '../utils/logger';
 import { config } from '../config';
-import { StreamForgeDB } from '../utils/database';
+import { nicetoAIyouDB } from '../utils/database';
 import { AIEngine } from '../ai/engine';
 import { PersonaManager } from '../persona/PersonaManager';
 import { QuestSystem } from '../features/QuestSystem';
 import { DeathCounter } from '../features/DeathCounter';
 import { ChatMemory } from '../memory/ChatMemory';
-import type { ServerToClientEvents, ClientToServerEvents, ChannelConfig } from '@streamforge/shared';
+import type { ServerToClientEvents, ClientToServerEvents, ChannelConfig } from '@nicetoaiyou/shared';
 
 export function createAdminServer(
-  db: StreamForgeDB,
+  db: nicetoAIyouDB,
   ai: AIEngine,
   personaManager: PersonaManager,
   questSystem: QuestSystem,
@@ -44,7 +44,7 @@ export function createAdminServer(
   const basicAuth = (req: any, res: any, next: any) => {
     const auth = req.headers.authorization;
     if (!auth || !auth.startsWith('Basic ')) {
-      res.setHeader('WWW-Authenticate', 'Basic realm="StreamForge Admin"');
+      res.setHeader('WWW-Authenticate', 'Basic realm="nicetoAIyou Admin"');
       return res.status(401).json({ error: 'Authentication required' });
     }
     const decoded = Buffer.from(auth.split(' ')[1], 'base64').toString();
@@ -62,7 +62,7 @@ export function createAdminServer(
   app.get('/api/health', (_req, res) => {
     res.json({
       status: 'ok',
-      version: '0.2.5',
+      version: '1.0.0',
       twitch: { connected: twitchBot?.isConnected() || false },
       kick: { connected: kickBot?.isConnected() || false },
       uptime: process.uptime(),

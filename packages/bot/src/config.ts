@@ -1,5 +1,5 @@
 // ============================================================
-// StreamForge AI Bot - Environment Configuration
+// nicetoAIyou Bot - Environment Configuration
 // ============================================================
 
 import dotenv from 'dotenv';
@@ -16,7 +16,7 @@ export const config = {
 
   // Twitch
   TWITCH_CHANNELS: (process.env.TWITCH_CHANNELS || '').split(',').filter(Boolean),
-  TWITCH_USERNAME: process.env.TWITCH_USERNAME || 'streamforgebot',
+  TWITCH_USERNAME: process.env.TWITCH_USERNAME || 'nicetoaiyoubot',
   TWITCH_OAUTH_TOKEN: process.env.TWITCH_OAUTH_TOKEN || '',
   TWITCH_CLIENT_ID: process.env.TWITCH_CLIENT_ID || '',
 
@@ -48,7 +48,7 @@ export const config = {
   RESPONSE_PROBABILITY: parseFloat(process.env.RESPONSE_PROBABILITY || '0.8'),
 
   // Database
-  DB_PATH: process.env.DB_PATH || path.resolve(process.cwd(), 'data', 'streamforge.db'),
+  DB_PATH: process.env.DB_PATH || path.resolve(process.cwd(), 'data', 'nicetoaiyou.db'),
 
   // Redis (optional)
   REDIS_URL: process.env.REDIS_URL || 'redis://localhost:6379',
@@ -68,7 +68,7 @@ export const config = {
 
   // Admin
   ADMIN_USERNAME: process.env.ADMIN_USERNAME || 'admin',
-  ADMIN_PASSWORD: process.env.ADMIN_PASSWORD || 'streamforge',
+  ADMIN_PASSWORD: process.env.ADMIN_PASSWORD || 'nicetoaiyou',
 
   // Logging
   LOG_LEVEL: process.env.LOG_LEVEL || 'info',

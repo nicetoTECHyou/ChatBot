@@ -1,20 +1,20 @@
 // ============================================================
-// StreamForge AI Bot - Persona Manager
+// nicetoAIyou Bot - Persona Manager
 // ============================================================
 
 import { logger } from '../utils/logger';
-import { StreamForgeDB } from '../utils/database';
+import { nicetoAIyouDB } from '../utils/database';
 import { AIEngine } from '../ai/engine';
-import type { PersonaConfig } from '@streamforge/shared';
+import type { PersonaConfig } from '@nicetoaiyou/shared';
 import { config } from '../config';
 
 export class PersonaManager {
-  private db: StreamForgeDB;
+  private db: nicetoAIyouDB;
   private ai: AIEngine;
   private activePersonas: Map<string, string> = new Map(); // channelId -> personaId
   private sentimentHistory: Map<string, { score: number; timestamp: number }[]> = new Map();
 
-  constructor(db: StreamForgeDB, ai: AIEngine) {
+  constructor(db: nicetoAIyouDB, ai: AIEngine) {
     this.db = db;
     this.ai = ai;
   }

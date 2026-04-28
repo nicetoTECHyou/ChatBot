@@ -1,4 +1,4 @@
-// API Client with Basic Auth for StreamForge AI Bot
+// API Client with Basic Auth for nicetoAIyou Bot
 
 const API_BASE = typeof window !== 'undefined' 
   ? (process.env.NEXT_PUBLIC_API_BASE || 'http://localhost:3001/api')

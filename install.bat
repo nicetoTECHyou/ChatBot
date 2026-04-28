@@ -1,10 +1,10 @@
 @echo off
-title StreamForge AI - Neuinstallation
+title nicetoAIyou - Neuinstallation
 color 0B
 
 echo.
 echo  ============================================
-echo    StreamForge AI - Saubere Neuinstallation
+echo    nicetoAIyou - Saubere Neuinstallation
 echo        KI-Chat-Bot fuer Twitch und Kick
 echo  ============================================
 echo.
@@ -119,7 +119,7 @@ echo.
 echo  3. Oeffne das Admin Interface:
 echo     http://localhost:3001
 echo     Benutzer: admin
-echo     Passwort: streamforge
+echo     Passwort: nicetoaiyou
 echo.
 
 if not exist ".env" (

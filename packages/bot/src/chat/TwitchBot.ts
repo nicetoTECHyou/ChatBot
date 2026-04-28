@@ -1,21 +1,21 @@
 // ============================================================
-// StreamForge AI Bot - Twitch Chat Connector
+// nicetoAIyou Bot - Twitch Chat Connector
 // ============================================================
 
 import tmi from 'tmi.js';
 import { EventEmitter } from 'events';
 import { logger } from '../utils/logger';
-import { StreamForgeDB } from '../utils/database';
+import { nicetoAIyouDB } from '../utils/database';
 import { ChatMemory } from '../memory/ChatMemory';
 import { AIEngine } from '../ai/engine';
 import { PersonaManager } from '../persona/PersonaManager';
 import { QuestSystem } from '../features/QuestSystem';
 import { DeathCounter } from '../features/DeathCounter';
-import type { ChatMessage, ChannelConfig } from '@streamforge/shared';
+import type { ChatMessage, ChannelConfig } from '@nicetoaiyou/shared';
 
 export class TwitchBot extends EventEmitter {
   private client: any = null;
-  private db: StreamForgeDB;
+  private db: nicetoAIyouDB;
   private memory: ChatMemory;
   private ai: AIEngine;
   private personaManager: PersonaManager;
@@ -24,7 +24,7 @@ export class TwitchBot extends EventEmitter {
   private connected = false;
   private commandCooldowns: Map<string, number> = new Map();
 
-  constructor(db: StreamForgeDB, memory: ChatMemory, ai: AIEngine, personaManager: PersonaManager, questSystem: QuestSystem, deathCounter: DeathCounter) {
+  constructor(db: nicetoAIyouDB, memory: ChatMemory, ai: AIEngine, personaManager: PersonaManager, questSystem: QuestSystem, deathCounter: DeathCounter) {
     super();
     this.db = db;
     this.memory = memory;
@@ -56,7 +56,7 @@ export class TwitchBot extends EventEmitter {
 
     this.client = new (tmi as any).Client({
       identity: {
-        username: process.env.TWITCH_USERNAME || 'streamforgebot',
+        username: process.env.TWITCH_USERNAME || 'nicetoaiyoubot',
         password: oauthToken,
       },
       channels: channelNames,
@@ -144,7 +144,7 @@ export class TwitchBot extends EventEmitter {
     }
 
     if (text.length < 3) return;
-    if (chatMessage.username.toLowerCase() === 'streamforgebot') return;
+    if (chatMessage.username.toLowerCase() === 'nicetoaiyoubot') return;
 
     await this.generateBotResponse(channelId, chatMessage, channelConfig);
   }

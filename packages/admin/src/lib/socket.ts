@@ -23,17 +23,17 @@ export function connectSocket(): Socket {
   });
 
   socket.on('connect', () => {
-    console.log('[StreamForge] Socket verbunden');
+    console.log('[nicetoAIyou] Socket verbunden');
     emitInternal('__connected', {});
   });
 
   socket.on('disconnect', (reason) => {
-    console.log('[StreamForge] Socket getrennt:', reason);
+    console.log('[nicetoAIyou] Socket getrennt:', reason);
     emitInternal('__disconnected', { reason });
   });
 
   socket.on('connect_error', (error) => {
-    console.error('[StreamForge] Socket Fehler:', error.message);
+    console.error('[nicetoAIyou] Socket Fehler:', error.message);
     emitInternal('__error', { error: error.message });
   });
 

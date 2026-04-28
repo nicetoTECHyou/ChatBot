@@ -64,7 +64,7 @@ export default function LoginScreen() {
           <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-forge-purple/20 border border-forge-purple/30 mb-4 animate-glow">
             <Zap className="w-10 h-10 text-forge-purple-light" />
           </div>
-          <h1 className="text-3xl font-bold text-gradient">StreamForge AI</h1>
+          <h1 className="text-3xl font-bold text-gradient">nicetoAIyou</h1>
           <p className="text-forge-text-muted mt-2">Admin-Dashboard</p>
         </div>
 

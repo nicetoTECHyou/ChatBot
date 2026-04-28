@@ -1,11 +1,11 @@
 // ============================================================
-// StreamForge AI Bot - Main Entry Point
+// nicetoAIyou Bot - Main Entry Point
 // ============================================================
 
 import chalk from 'chalk';
 import { logger } from './utils/logger';
 import { config } from './config';
-import { StreamForgeDB } from './utils/database';
+import { nicetoAIyouDB } from './utils/database';
 import { ChatMemory } from './memory/ChatMemory';
 import { AIEngine } from './ai/engine';
 import { PersonaManager } from './persona/PersonaManager';
@@ -15,8 +15,8 @@ import { TwitchBot } from './chat/TwitchBot';
 import { KickBot } from './chat/KickBot';
 import { createAdminServer } from './admin/server';
 
-class StreamForgeBot {
-  private db: StreamForgeDB;
+class nicetoAIyouBot {
+  private db: nicetoAIyouDB;
   private memory: ChatMemory;
   private ai: AIEngine;
   private personaManager: PersonaManager;
@@ -28,7 +28,7 @@ class StreamForgeBot {
 
   constructor() {
     // Initialize database
-    this.db = new StreamForgeDB();
+    this.db = new nicetoAIyouDB();
 
     // Initialize chat memory (session-based)
     this.memory = new ChatMemory(config.MAX_CHAT_HISTORY);
@@ -106,7 +106,7 @@ class StreamForgeBot {
   async start(): Promise<void> {
     logger.info(chalk.bold.blue(`
   ╔══════════════════════════════════════╗
-  ║      StreamForge AI Bot v0.2.5       ║
+  ║      nicetoAIyou Bot v1.0.0       ║
   ║   KI-Chat-Bot für Twitch & Kick     ║
   ╚══════════════════════════════════════╝
     `));
@@ -165,7 +165,7 @@ class StreamForgeBot {
     // LM Studio check
     this.checkLMStudioConnection();
 
-    logger.info(chalk.green('  ✅ StreamForge AI Bot ist bereit!\n'));
+    logger.info(chalk.green('  ✅ nicetoAIyou Bot ist bereit!\n'));
   }
 
   private async checkLMStudioConnection(): Promise<void> {
@@ -194,7 +194,7 @@ class StreamForgeBot {
   }
 
   async stop(): Promise<void> {
-    logger.info('Shutting down StreamForge AI...');
+    logger.info('Shutting down nicetoAIyou...');
     this.twitchBot.disconnect();
     this.kickBot.disconnect();
     this.adminServer.server.close();
@@ -206,7 +206,7 @@ class StreamForgeBot {
 }
 
 // Start the bot
-const bot = new StreamForgeBot();
+const bot = new nicetoAIyouBot();
 
 process.on('SIGINT', () => bot.stop());
 process.on('SIGTERM', () => bot.stop());
@@ -216,4 +216,4 @@ bot.start().catch((error) => {
   process.exit(1);
 });
 
-export { StreamForgeBot };
+export { nicetoAIyouBot };

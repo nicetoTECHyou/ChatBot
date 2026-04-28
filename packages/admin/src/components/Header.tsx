@@ -15,7 +15,7 @@ export default function Header() {
           <Zap className="w-5 h-5 text-forge-purple-light" />
         </div>
         <div>
-          <h1 className="text-lg font-bold text-gradient leading-none">StreamForge AI</h1>
+          <h1 className="text-lg font-bold text-gradient leading-none">nicetoAIyou</h1>
           <p className="text-[10px] text-forge-text-muted leading-none mt-0.5">Admin Dashboard</p>
         </div>
       </div>

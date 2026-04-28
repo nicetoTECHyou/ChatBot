@@ -1,5 +1,5 @@
 // ============================================================
-// StreamForge AI Bot - Logger
+// nicetoAIyou Bot - Logger
 // ============================================================
 
 import winston from 'winston';
@@ -17,7 +17,7 @@ export const logger = winston.createLogger({
     timestamp({ format: 'YYYY-MM-DD HH:mm:ss' }),
     logFormat
   ),
-  defaultMeta: { service: 'streamforge' },
+  defaultMeta: { service: 'nicetoaiyou' },
   transports: [
     new winston.transports.Console({
       format: combine(colorize(), logFormat),

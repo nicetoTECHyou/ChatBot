@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'StreamForge AI — Admin Dashboard',
-  description: 'StreamForge AI Bot Administration Panel',
+  title: 'nicetoAIyou — Admin Dashboard',
+  description: 'nicetoAIyou Bot Administration Panel',
 };
 
 export default function RootLayout({

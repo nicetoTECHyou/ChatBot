@@ -1,4 +1,4 @@
-# StreamForge AI Bot
+# nicetoAIyou Bot
 
 <p align="center">
   <strong>KI-gesteuerter Multi-Persona Chat-Bot für Twitch & Kick</strong>
@@ -14,9 +14,9 @@
 
 ---
 
-## Was ist StreamForge AI?
+## Was ist nicetoAIyou?
 
-StreamForge AI ist ein hochgradig innovativer, KI-gesteuerter Chat-Bot, der gleichzeitig auf Twitch und Kick eingesetzt werden kann. Er nutzt echtes Sprachverstehen und ein dynamisches Multi-Persona-System, um den Chat als aktiver Co-Moderator zu lenken.
+nicetoAIyou ist ein hochgradig innovativer, KI-gesteuerter Chat-Bot, der gleichzeitig auf Twitch und Kick eingesetzt werden kann. Er nutzt echtes Sprachverstehen und ein dynamisches Multi-Persona-System, um den Chat als aktiver Co-Moderator zu lenken.
 
 ### Kernfeatures
 
@@ -88,7 +88,7 @@ docker compose logs -f
 Nach dem Start öffne: **http://localhost:3001**
 
 - Standard-Benutzer: `admin`
-- Standard-Passwort: `streamforge`
+- Standard-Passwort: `nicetoaiyou`
 - Ändere das Passwort in der `.env` Datei!
 
 ---
@@ -124,7 +124,7 @@ Siehe `.env.example` für alle verfügbaren Optionen.
 ## Projektstruktur
 
 ```
-StreamForge-AI/
+nicetoAIyou/
 ├── packages/
 │   ├── bot/           # Bot Engine (Node.js/TypeScript)
 │   │   └── src/

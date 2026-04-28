@@ -1,13 +1,13 @@
 // ============================================================
-// StreamForge AI Bot - AI Engine with Fallback Chain
+// nicetoAIyou Bot - AI Engine with Fallback Chain
 // ============================================================
 
 import OpenAI from 'openai';
 import Anthropic from '@anthropic-ai/sdk';
 import { logger } from '../utils/logger';
 import { config } from '../config';
-import { StreamForgeDB } from '../utils/database';
-import type { AIProvider, BotResponse, ChatMessage, SentimentType } from '@streamforge/shared';
+import { nicetoAIyouDB } from '../utils/database';
+import type { AIProvider, BotResponse, ChatMessage, SentimentType } from '@nicetoaiyou/shared';
 
 interface CircuitBreakerState {
   failures: number;
@@ -17,7 +17,7 @@ interface CircuitBreakerState {
 }
 
 export class AIEngine {
-  private db: StreamForgeDB;
+  private db: nicetoAIyouDB;
   private openaiClient: OpenAI | null = null;
   private anthropicClient: Anthropic | null = null;
   private circuitBreakers: Map<string, CircuitBreakerState> = new Map();
@@ -25,7 +25,7 @@ export class AIEngine {
   private responseCache: Map<string, { response: string; timestamp: number }> = new Map();
   private cooldowns: Map<string, number> = new Map();
 
-  constructor(db: StreamForgeDB) {
+  constructor(db: nicetoAIyouDB) {
     this.db = db;
     this.initializeClients();
     this.startCacheCleanup();

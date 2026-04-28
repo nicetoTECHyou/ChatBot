@@ -1,11 +1,11 @@
 @echo off
-title StreamForge AI Bot
+title nicetoAIyou Bot
 color 0A
 setlocal enabledelayedexpansion
 
 echo.
 echo  ============================================
-echo       StreamForge AI Bot - One-Click Start
+echo       nicetoAIyou Bot - One-Click Start
 echo        KI-Chat-Bot fuer Twitch und Kick
 echo  ============================================
 echo.
@@ -101,7 +101,7 @@ echo.
 if not exist "data" mkdir data
 
 echo  ============================================
-echo         STARTING STREAMFORGE AI ...
+echo         STARTING NICETOAIYOU AI ...
 echo  ============================================
 echo.
 echo  Druecke STRG+C zum Beenden.

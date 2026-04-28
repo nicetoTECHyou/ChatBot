@@ -1,16 +1,16 @@
 // ============================================================
-// StreamForge AI Bot - Death Counter
+// nicetoAIyou Bot - Death Counter
 // ============================================================
 
 import { logger } from '../utils/logger';
-import { StreamForgeDB } from '../utils/database';
+import { nicetoAIyouDB } from '../utils/database';
 import { config } from '../config';
-import type { GameState } from '@streamforge/shared';
+import type { GameState } from '@nicetoaiyou/shared';
 
 export class DeathCounter {
-  private db: StreamForgeDB;
+  private db: nicetoAIyouDB;
 
-  constructor(db: StreamForgeDB) {
+  constructor(db: nicetoAIyouDB) {
     this.db = db;
   }
 

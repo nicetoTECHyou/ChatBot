@@ -1,6 +1,6 @@
 #!/bin/bash
 # ============================================================
-# StreamForge AI Bot - One-Click Start Script (Linux/Mac)
+# nicetoAIyou Bot - One-Click Start Script (Linux/Mac)
 # ============================================================
 
 set -e
@@ -14,7 +14,7 @@ NC='\033[0m'
 
 echo ""
 echo "  ╔══════════════════════════════════════════════╗"
-echo "  ║       StreamForge AI Bot - One-Click Start   ║"
+echo "  ║       nicetoAIyou Bot - One-Click Start   ║"
 echo "  ║      KI-Chat-Bot fuer Twitch und Kick        ║"
 echo "  ╚══════════════════════════════════════════════╝"
 echo ""
@@ -90,7 +90,7 @@ mkdir -p data
 # Step 6: Start the Bot!
 # ============================================
 echo "  ╔══════════════════════════════════════════════╗"
-echo "  ║          STARTING STREAMFORGE AI ...         ║"
+echo "  ║          STARTING NICETOAIYOU AI ...         ║"
 echo "  ╚══════════════════════════════════════════════╝"
 echo ""
 echo "  Druecke STRG+C zum Beenden."

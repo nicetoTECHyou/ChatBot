@@ -1,8 +1,8 @@
 // ============================================================
-// StreamForge AI Bot - Chat Memory (Session-based)
+// nicetoAIyou Bot - Chat Memory (Session-based)
 // ============================================================
 
-import type { ChatMessage } from '@streamforge/shared';
+import type { ChatMessage } from '@nicetoaiyou/shared';
 import { config } from '../config';
 
 export class ChatMemory {

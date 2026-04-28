@@ -1,11 +1,11 @@
 // ============================================================
-// StreamForge AI Bot - Quest System
+// nicetoAIyou Bot - Quest System
 // ============================================================
 
 import { v4 as uuid } from 'uuid';
 import { logger } from '../utils/logger';
-import { StreamForgeDB } from '../utils/database';
-import type { ChatMessage, GameState } from '@streamforge/shared';
+import { nicetoAIyouDB } from '../utils/database';
+import type { ChatMessage, GameState } from '@nicetoaiyou/shared';
 import { config } from '../config';
 
 interface QuestInstance {
@@ -23,10 +23,10 @@ interface QuestInstance {
 }
 
 export class QuestSystem {
-  private db: StreamForgeDB;
+  private db: nicetoAIyouDB;
   private activeQuests: Map<string, QuestInstance[]> = new Map();
 
-  constructor(db: StreamForgeDB) {
+  constructor(db: nicetoAIyouDB) {
     this.db = db;
   }
 

@@ -1,5 +1,5 @@
 // ============================================================
-// StreamForge AI - Shared Types & Constants
+// nicetoAIyou - Shared Types & Constants
 // ============================================================
 
 export type Platform = 'twitch' | 'kick';

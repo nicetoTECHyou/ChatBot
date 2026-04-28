@@ -160,7 +160,7 @@ const defaultPersonas: Persona[] = [
 ];
 
 const defaultChannels: Channel[] = [
-  { id: '1', name: 'streamforge', platform: 'twitch', oauthToken: '', enabled: true, connected: true },
+  { id: '1', name: 'nicetoaiyou', platform: 'twitch', oauthToken: '', enabled: true, connected: true },
 ];
 
 const defaultProviders: AIProvider[] = [
@@ -176,7 +176,7 @@ const defaultQuests: Quest[] = [
 ];
 
 const defaultLore: LoreEntry[] = [
-  { id: '1', title: 'Die Geburt des StreamForge', content: 'Es war an einem dunklen Novemberabend, als die Idee geboren wurde — ein KI-Bot, der den Chat zum Leben erweckt...', tags: ['Hintergrund', 'Origins'], priority: 1, createdAt: new Date(), updatedAt: new Date() },
+  { id: '1', title: 'Die Geburt des nicetoAIyou', content: 'Es war an einem dunklen Novemberabend, als die Idee geboren wurde — ein KI-Bot, der den Chat zum Leben erweckt...', tags: ['Hintergrund', 'Origins'], priority: 1, createdAt: new Date(), updatedAt: new Date() },
   { id: '2', title: 'Die 7 Personas', content: 'Jede Persona hat eine einzigartige Persönlichkeit, geformt aus unzähligen Chat-Interaktionen und Stream-Momenten...', tags: ['Personas', 'Lore'], priority: 2, createdAt: new Date(), updatedAt: new Date() },
 ];
 

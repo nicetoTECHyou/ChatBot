@@ -1,5 +1,5 @@
 # ============================================================
-# StreamForge AI - One-Click Start Script
+# nicetoAIyou - One-Click Start Script
 # ============================================================
 
 #!/bin/bash
@@ -7,7 +7,7 @@ set -e
 
 echo ""
 echo "  ╔══════════════════════════════════════╗"
-echo "  ║   StreamForge AI - Quick Setup      ║"
+echo "  ║   nicetoAIyou - Quick Setup      ║"
 echo "  ║   KI-Chat-Bot für Twitch & Kick     ║"
 echo "  ╚══════════════════════════════════════╝"
 echo ""

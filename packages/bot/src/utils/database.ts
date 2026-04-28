@@ -1,5 +1,5 @@
 // ============================================================
-// StreamForge AI Bot - SQLite Database
+// nicetoAIyou Bot - SQLite Database
 // ============================================================
 
 import Database from 'better-sqlite3';
@@ -7,9 +7,9 @@ import path from 'path';
 import fs from 'fs';
 import { logger } from '../utils/logger';
 import { config } from '../config';
-import type { ChannelConfig, CustomCommand, LoreEntry, ViewerProfile, GameState, StreamStats } from '@streamforge/shared';
+import type { ChannelConfig, CustomCommand, LoreEntry, ViewerProfile, GameState, StreamStats } from '@nicetoaiyou/shared';
 
-export class StreamForgeDB {
+export class nicetoAIyouDB {
   private db: Database.Database;
 
   constructor(dbPath?: string) {

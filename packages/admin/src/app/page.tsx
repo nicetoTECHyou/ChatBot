@@ -73,7 +73,7 @@ export default function AdminDashboard() {
     const persona = personas.find(p => p.id === response.personaId);
     addChatMessage({
       timestamp: new Date(),
-      username: 'StreamForge',
+      username: 'nicetoAIyou',
       message: response.text,
       platform: 'twitch',
       isBot: true,
@@ -156,7 +156,7 @@ export default function AdminDashboard() {
     return (
       <div className="h-screen flex flex-col overflow-hidden bg-forge-bg">
         <div className="flex items-center justify-center h-full">
-          <div className="text-forge-text/60 text-lg">StreamForge AI ladt...</div>
+          <div className="text-forge-text/60 text-lg">nicetoAIyou ladt...</div>
         </div>
       </div>
     );

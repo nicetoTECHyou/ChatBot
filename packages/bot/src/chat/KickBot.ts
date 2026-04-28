@@ -1,17 +1,17 @@
 // ============================================================
-// StreamForge AI Bot - Kick Chat Connector
+// nicetoAIyou Bot - Kick Chat Connector
 // ============================================================
 
 import WebSocket from 'ws';
 import { EventEmitter } from 'events';
 import { logger } from '../utils/logger';
-import { StreamForgeDB } from '../utils/database';
+import { nicetoAIyouDB } from '../utils/database';
 import { ChatMemory } from '../memory/ChatMemory';
 import { AIEngine } from '../ai/engine';
 import { PersonaManager } from '../persona/PersonaManager';
 import { QuestSystem } from '../features/QuestSystem';
 import { DeathCounter } from '../features/DeathCounter';
-import type { ChatMessage, ChannelConfig } from '@streamforge/shared';
+import type { ChatMessage, ChannelConfig } from '@nicetoaiyou/shared';
 
 interface KickMessage {
   event?: string;
@@ -34,7 +34,7 @@ interface KickMessage {
 
 export class KickBot extends EventEmitter {
   private ws: WebSocket | null = null;
-  private db: StreamForgeDB;
+  private db: nicetoAIyouDB;
   private memory: ChatMemory;
   private ai: AIEngine;
   private personaManager: PersonaManager;
@@ -45,7 +45,7 @@ export class KickBot extends EventEmitter {
   private pingTimer: NodeJS.Timeout | null = null;
   private channels: Map<string, { chatroomId: string; channelName: string }> = new Map();
 
-  constructor(db: StreamForgeDB, memory: ChatMemory, ai: AIEngine, personaManager: PersonaManager, questSystem: QuestSystem, deathCounter: DeathCounter) {
+  constructor(db: nicetoAIyouDB, memory: ChatMemory, ai: AIEngine, personaManager: PersonaManager, questSystem: QuestSystem, deathCounter: DeathCounter) {
     super();
     this.db = db;
     this.memory = memory;
