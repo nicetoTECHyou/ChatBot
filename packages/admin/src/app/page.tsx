@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useCallback, useState } from 'react';
-import { useDashboardStore, type PanelType, type ChatMessage } from '@/lib/store';
+import { useDashboardStore, type PanelType } from '@/lib/store';
 import { connectSocket, onSocket, offSocket, emitSocket, disconnectSocket } from '@/lib/socket';
 import { clearCredentials, hasCredentials } from '@/lib/api';
 
@@ -34,6 +34,7 @@ export default function AdminDashboard() {
   const {
     isAuthenticated,
     activePanel,
+    setIsAuthenticated,
     setSocketStatus,
     setTwitchConnected,
     setKickConnected,
@@ -46,14 +47,37 @@ export default function AdminDashboard() {
   // Wait for client-side hydration before rendering
   useEffect(() => {
     setMounted(true);
+    // Auto-authenticate if credentials exist in localStorage (avoids hydration mismatch)
+    if (!isAuthenticated && hasCredentials()) {
+      setIsAuthenticated(true);
+    }
   }, []);
 
   // Handle socket events
   const handleChatMessage = useCallback((data: unknown) => {
-    const msg = data as ChatMessage;
+    // Backend ChatMessage has 'text' field, frontend store uses 'message'
+    const raw = data as any;
     addChatMessage({
-      ...msg,
-      timestamp: msg.timestamp instanceof Date ? msg.timestamp : new Date(msg.timestamp as string),
+      timestamp: raw.timestamp instanceof Date ? raw.timestamp : new Date(raw.timestamp as string),
+      username: raw.displayName || raw.username || 'unknown',
+      message: raw.text || '',
+      platform: raw.platform || 'twitch',
+      isBot: false,
+    });
+  }, [addChatMessage]);
+
+  const handleBotResponse = useCallback((data: unknown) => {
+    // Bot AI responses come as BotResponse type
+    const response = data as { text: string; personaId: string; provider: string; latencyMs: number };
+    const personas = useDashboardStore.getState().personas;
+    const persona = personas.find(p => p.id === response.personaId);
+    addChatMessage({
+      timestamp: new Date(),
+      username: 'StreamForge',
+      message: response.text,
+      platform: 'twitch',
+      isBot: true,
+      persona: persona?.name || response.personaId,
     });
   }, [addChatMessage]);
 
@@ -66,9 +90,13 @@ export default function AdminDashboard() {
   }, [setGameState]);
 
   const handleConnectionStatus = useCallback((data: unknown) => {
-    const status = data as { twitch?: boolean; kick?: boolean };
-    if (status.twitch !== undefined) setTwitchConnected(status.twitch);
-    if (status.kick !== undefined) setKickConnected(status.kick);
+    // Backend sends 'bot:status' events: { connected: boolean; platform: 'twitch'|'kick'; channel: string }
+    const status = data as { connected: boolean; platform: 'twitch' | 'kick'; channel: string };
+    if (status.platform === 'twitch') {
+      setTwitchConnected(status.connected);
+    } else if (status.platform === 'kick') {
+      setKickConnected(status.connected);
+    }
   }, [setTwitchConnected, setKickConnected]);
 
   const handleSentiment = useCallback((data: unknown) => {
@@ -89,20 +117,22 @@ export default function AdminDashboard() {
     onSocket('__disconnected', () => setSocketStatus('disconnected'));
 
     onSocket('chat:message', handleChatMessage);
+    onSocket('bot:response', handleBotResponse);
     onSocket('game:death', handleDeath);
     onSocket('game:state', handleGameState);
-    onSocket('connection:status', handleConnectionStatus);
+    onSocket('bot:status', handleConnectionStatus);
     onSocket('chat:sentiment', handleSentiment);
 
     return () => {
       offSocket('chat:message', handleChatMessage);
+      offSocket('bot:response', handleBotResponse);
       offSocket('game:death', handleDeath);
       offSocket('game:state', handleGameState);
-      offSocket('connection:status', handleConnectionStatus);
+      offSocket('bot:status', handleConnectionStatus);
       offSocket('chat:sentiment', handleSentiment);
       disconnectSocket();
     };
-  }, [mounted, isAuthenticated, handleChatMessage, handleDeath, handleGameState, handleConnectionStatus, handleSentiment, setSocketStatus, addChatMessage, addSentimentPoint]);
+  }, [mounted, isAuthenticated, handleChatMessage, handleBotResponse, handleDeath, handleGameState, handleConnectionStatus, handleSentiment, setSocketStatus, addChatMessage, addSentimentPoint]);
 
   // Session time ticker
   useEffect(() => {
@@ -133,7 +163,7 @@ export default function AdminDashboard() {
   }
 
   // Not authenticated -> show login
-  if (!isAuthenticated || !hasCredentials()) {
+  if (!isAuthenticated) {
     return <LoginScreen />;
   }
 

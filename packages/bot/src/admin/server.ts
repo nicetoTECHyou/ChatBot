@@ -62,7 +62,7 @@ export function createAdminServer(
   app.get('/api/health', (_req, res) => {
     res.json({
       status: 'ok',
-      version: '0.2.4',
+      version: '0.2.5',
       twitch: { connected: twitchBot?.isConnected() || false },
       kick: { connected: kickBot?.isConnected() || false },
       uptime: process.uptime(),

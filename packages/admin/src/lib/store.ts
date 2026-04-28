@@ -253,8 +253,8 @@ interface DashboardStore {
 }
 
 export const useDashboardStore = create<DashboardStore>((set, get) => ({
-  // Auth
-  isAuthenticated: typeof window !== 'undefined' ? !!localStorage.getItem('sf_credentials') : false,
+  // Auth - always start false to avoid hydration mismatch (static export)
+  isAuthenticated: false,
   setIsAuthenticated: (v) => set({ isAuthenticated: v }),
 
   // Navigation
