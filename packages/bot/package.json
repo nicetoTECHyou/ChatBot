@@ -1,6 +1,6 @@
 {
   "name": "@streamforge/bot",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "StreamForge AI Bot Engine - Core chat bot for Twitch & Kick",
   "main": "dist/index.js",
   "scripts": {

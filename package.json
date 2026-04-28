@@ -1,6 +1,6 @@
 {
   "name": "streamforge-ai",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "StreamForge AI - KI-gesteuerter Multi-Persona Chat-Bot für Twitch & Kick",
   "private": true,
   "workspaces": [

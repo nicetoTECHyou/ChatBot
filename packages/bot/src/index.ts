@@ -106,7 +106,7 @@ class StreamForgeBot {
   async start(): Promise<void> {
     logger.info(chalk.bold.blue(`
   ╔══════════════════════════════════════╗
-  ║      StreamForge AI Bot v0.1.0       ║
+  ║      StreamForge AI Bot v0.2.0       ║
   ║   KI-Chat-Bot für Twitch & Kick     ║
   ╚══════════════════════════════════════╝
     `));
