@@ -1,13 +1,12 @@
 @echo off
 title StreamForge AI Bot
 color 0A
-chcp 65001 >nul 2>&1
 
 echo.
-echo  ╔══════════════════════════════════════════════╗
-echo  ║       StreamForge AI Bot - One-Click Start   ║
-echo  ║      KI-Chat-Bot fuer Twitch und Kick       ║
-echo  ╚══════════════════════════════════════════════╝
+echo  ============================================
+echo       StreamForge AI Bot - One-Click Start
+echo        KI-Chat-Bot fuer Twitch und Kick
+echo  ============================================
 echo.
 
 :: ============================================
@@ -19,7 +18,7 @@ if %errorlevel% neq 0 (
     echo  [FEHLER] Node.js nicht gefunden!
     echo.
     echo  Bitte installiere Node.js 20+ von: https://nodejs.org/
-    echo  Waehle dabei "LTS" Version aus.
+    echo  Waehle dabei die LTS Version aus.
     echo.
     pause
     exit /b 1
@@ -55,7 +54,8 @@ if not exist ".env" (
         color 0A
     ) else (
         color 0C
-        echo  [FEHLER] .env.example nicht gefunden! Projekt beschaeidgt?
+        echo  [FEHLER] .env.example nicht gefunden!
+        echo  Projekt beschaedigt oder nicht komplett heruntergeladen.
         pause
         exit /b 1
     )
@@ -78,7 +78,6 @@ if not exist "node_modules" (
     echo  [OK] Abhaengigkeiten installiert
     echo.
 
-    :: Build everything
     echo  [BUILD] Baue das Projekt ...
     call npm run build
     if %errorlevel% neq 0 (
@@ -115,9 +114,9 @@ if not exist "data" mkdir data
 :: ============================================
 :: Step 6: Start the Bot!
 :: ============================================
-echo  ╔══════════════════════════════════════════════╗
-echo  ║          STARTING STREAMFORGE AI ...         ║
-echo  ╚══════════════════════════════════════════════╝
+echo  ============================================
+echo         STARTING STREAMFORGE AI ...
+echo  ============================================
 echo.
 echo  Druecke STRG+C zum Beenden.
 echo.

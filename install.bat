@@ -1,13 +1,12 @@
 @echo off
 title StreamForge AI - Neuinstallation
 color 0B
-chcp 65001 >nul 2>&1
 
 echo.
-echo  ╔══════════════════════════════════════════════╗
-echo  ║     StreamForge AI - Saubere Neuinstallation  ║
-echo  ║      KI-Chat-Bot fuer Twitch und Kick        ║
-echo  ╚══════════════════════════════════════════════╝
+echo  ============================================
+echo    StreamForge AI - Saubere Neuinstallation
+echo        KI-Chat-Bot fuer Twitch und Kick
+echo  ============================================
 echo.
 
 :: ============================================
@@ -105,9 +104,9 @@ if not exist "data" mkdir data
 :: ============================================
 :: Done
 :: ============================================
-echo  ╔══════════════════════════════════════════════╗
-echo  ║      INSTALLATION ERFOLGREICH!               ║
-echo  ╚══════════════════════════════════════════════╝
+echo  ============================================
+echo       INSTALLATION ERFOLGREICH!
+echo  ============================================
 echo.
 echo  Naechster Schritt:
 echo.

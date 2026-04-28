@@ -1,15 +1,13 @@
 @echo off
 title StreamForge AI Bot - STOP
 color 0C
-chcp 65001 >nul 2>&1
 
 echo.
-echo  ╔══════════════════════════════════════════════╗
-echo  ║          STOPPING STREAMFORGE AI ...         ║
-echo  ╚══════════════════════════════════════════════╝
+echo  ============================================
+echo         STOPPING STREAMFORGE AI ...
+echo  ============================================
 echo.
 
-:: Kill node processes running our bot
 taskkill /f /im node.exe >nul 2>&1
 
 echo  [OK] StreamForge AI Bot wurde gestoppt.
