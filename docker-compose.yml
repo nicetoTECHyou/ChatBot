@@ -1,0 +1,27 @@
+services:
+  streamforge-bot:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: streamforge-ai
+    restart: unless-stopped
+    ports:
+      - "3001:3001"
+    volumes:
+      - streamforge-data:/app/data
+      - ./packages/admin/out:/app/packages/admin/out:ro
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+      - DB_PATH=/app/data/streamforge.db
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3001/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 15s
+
+volumes:
+  streamforge-data:
+    driver: local

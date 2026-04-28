@@ -1,0 +1,104 @@
+name: Build & Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build shared
+        run: npm run build --workspace=packages/shared
+
+      - name: Build bot
+        run: npm run build --workspace=packages/bot
+
+      - name: Build admin dashboard
+        run: npm run build --workspace=packages/admin
+
+      - name: Package distribution
+        run: |
+          mkdir -p dist
+          cp -r packages/bot/dist dist/bot
+          cp -r packages/bot/node_modules dist/bot/node_modules
+          cp -r packages/shared/dist dist/shared
+          cp -r packages/shared/node_modules dist/shared/node_modules
+          cp -r packages/admin/out dist/admin
+          cp packages/bot/package.json dist/bot/package.json
+          cp packages/shared/package.json dist/shared/package.json
+          cp .env.example dist/.env.example
+          cp scripts/setup.sh dist/setup.sh
+          cp docker-compose.yml dist/docker-compose.yml
+          cp docker/Dockerfile dist/Dockerfile
+          cp -r docker dist/docker
+          cp README.md dist/README.md
+          cp LICENSE dist/LICENSE 2>/dev/null || true
+          mkdir -p dist/data
+
+      - name: Create zip
+        run: |
+          cd dist && zip -r ../streamforge-ai-release.zip .
+          cd ..
+
+      - name: Get version from package.json
+        id: version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          BUILD=$(date +%Y%m%d-%H%M%S)
+          echo "version=v${VERSION}-${BUILD}" >> $GITHUB_OUTPUT
+          echo "tag=v${VERSION}-${BUILD}" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          name: "StreamForge AI ${{ steps.version.outputs.version }}"
+          body: |
+            ## StreamForge AI - Automated Release
+
+            **Version:** ${{ steps.version.outputs.version }}
+
+            ### One-Click Start
+            1. Download `streamforge-ai-release.zip`
+            2. Extract the archive
+            3. Copy `.env.example` to `.env` and edit your settings
+            4. Run: `node dist/bot/dist/index.js`
+            5. Open: `http://localhost:3001`
+
+            ### Docker
+            ```bash
+            docker compose up -d
+            ```
+
+            ### Features
+            - ✅ Multi-Persona System (7 Personas)
+            - ✅ KI-Fallback-Kette (LM Studio / OpenAI / Anthropic / Canned)
+            - ✅ Twitch & Kick Chat Integration
+            - ✅ Real-time Admin Dashboard
+            - ✅ Quest-System & XP/Level
+            - ✅ Death-Counter
+            - ✅ Sentiment-Analysis
+            - ✅ Lore-Datenbank
+            - ✅ Custom Commands
+          files: streamforge-ai-release.zip
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

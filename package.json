@@ -1,0 +1,26 @@
+{
+  "name": "streamforge-ai",
+  "version": "0.1.0",
+  "description": "StreamForge AI - KI-gesteuerter Multi-Persona Chat-Bot für Twitch & Kick",
+  "private": true,
+  "workspaces": [
+    "packages/bot",
+    "packages/admin",
+    "packages/shared",
+    "packages/database"
+  ],
+  "scripts": {
+    "dev:bot": "npm run dev --workspace=packages/bot",
+    "dev:admin": "npm run dev --workspace=packages/admin",
+    "build": "npm run build --workspace=packages/shared && npm run build --workspace=packages/bot && npm run build --workspace=packages/admin",
+    "start": "npm run start --workspace=packages/bot",
+    "lint": "eslint packages/*/src --ext .ts,.tsx",
+    "docker:build": "docker build -t streamforge-ai:latest -f docker/Dockerfile .",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

@@ -1,0 +1,11 @@
+node_modules/
+dist/
+out/
+data/
+*.db
+*.db-wal
+*.db-shm
+.env
+.env.local
+.git/
+.turbo/
