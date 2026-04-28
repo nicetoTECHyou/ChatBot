@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { useDashboardStore, type PanelType, type ChatMessage } from '@/lib/store';
 import { connectSocket, onSocket, offSocket, emitSocket, disconnectSocket } from '@/lib/socket';
 import { clearCredentials, hasCredentials } from '@/lib/api';
@@ -29,6 +29,8 @@ const panels: Record<PanelType, React.ReactNode> = {
 };
 
 export default function AdminDashboard() {
+  const [mounted, setMounted] = useState(false);
+
   const {
     isAuthenticated,
     activePanel,
@@ -40,6 +42,11 @@ export default function AdminDashboard() {
     incrementDeaths,
     addSentimentPoint,
   } = useDashboardStore();
+
+  // Wait for client-side hydration before rendering
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   // Handle socket events
   const handleChatMessage = useCallback((data: unknown) => {
@@ -71,7 +78,7 @@ export default function AdminDashboard() {
 
   // Setup socket connection
   useEffect(() => {
-    if (!isAuthenticated) return;
+    if (!mounted || !isAuthenticated) return;
 
     const socket = connectSocket();
     setSocketStatus('connecting');
@@ -87,44 +94,7 @@ export default function AdminDashboard() {
     onSocket('connection:status', handleConnectionStatus);
     onSocket('chat:sentiment', handleSentiment);
 
-    // Simulate some demo messages for testing
-    const demoTimer = setTimeout(() => {
-      const demoMessages = [
-        { username: 'PixelKrieger', message: 'Hey StreamForge, was geht?! 🔥', platform: 'twitch' as const },
-        { username: 'LootQueen', message: 'Das war ein krasser Move!', platform: 'twitch' as const },
-        { username: 'NoobSlayer42', message: 'Der Kritiker soll mal bewerten 😂', platform: 'twitch' as const },
-      ];
-      demoMessages.forEach((m, i) => {
-        setTimeout(() => {
-          addChatMessage({
-            username: m.username,
-            message: m.message,
-            platform: m.platform,
-            isBot: false,
-            timestamp: new Date(),
-          });
-          // Bot response after a delay
-          setTimeout(() => {
-            const responses = [
-              '🔥 JAAA! Das war EPISCH! Weiter so, LEGEND! 🔥🔥🔥',
-              'Kritische Analyse: Das war technisch gesehen akzeptabel... für einen Anfänger. 🧐',
-              '✨ Die Energien sind HEUTE unglaublich! Spürt ihr das?! ✨',
-            ];
-            addChatMessage({
-              username: 'StreamForge',
-              message: responses[i % responses.length],
-              platform: m.platform,
-              isBot: true,
-              timestamp: new Date(),
-              persona: ['Der Hypeman', 'Der Kritiker', 'Das Orakel'][i % 3],
-            });
-          }, 1500);
-        }, i * 3000);
-      });
-    }, 2000);
-
     return () => {
-      clearTimeout(demoTimer);
       offSocket('chat:message', handleChatMessage);
       offSocket('game:death', handleDeath);
       offSocket('game:state', handleGameState);
@@ -132,15 +102,14 @@ export default function AdminDashboard() {
       offSocket('chat:sentiment', handleSentiment);
       disconnectSocket();
     };
-  }, [isAuthenticated, handleChatMessage, handleDeath, handleGameState, handleConnectionStatus, handleSentiment, setSocketStatus, addChatMessage, addSentimentPoint]);
+  }, [mounted, isAuthenticated, handleChatMessage, handleDeath, handleGameState, handleConnectionStatus, handleSentiment, setSocketStatus, addChatMessage, addSentimentPoint]);
 
   // Session time ticker
   useEffect(() => {
-    if (!isAuthenticated) return;
+    if (!mounted || !isAuthenticated) return;
 
     const interval = setInterval(() => {
-      const now = new Date();
-      const sessionSeconds = 9252 + Math.floor((Date.now() % 100000) / 1000); // Demo offset
+      const sessionSeconds = 9252 + Math.floor((Date.now() % 100000) / 1000);
       const hours = Math.floor(sessionSeconds / 3600);
       const minutes = Math.floor((sessionSeconds % 3600) / 60);
       const seconds = sessionSeconds % 60;
@@ -150,14 +119,25 @@ export default function AdminDashboard() {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [isAuthenticated, setGameState]);
+  }, [mounted, isAuthenticated, setGameState]);
 
-  // Not authenticated → show login
+  // Before mount: render empty shell (matches server render)
+  if (!mounted) {
+    return (
+      <div className="h-screen flex flex-col overflow-hidden bg-forge-bg">
+        <div className="flex items-center justify-center h-full">
+          <div className="text-forge-text/60 text-lg">StreamForge AI ladt...</div>
+        </div>
+      </div>
+    );
+  }
+
+  // Not authenticated -> show login
   if (!isAuthenticated || !hasCredentials()) {
     return <LoginScreen />;
   }
 
-  // Authenticated → show dashboard
+  // Authenticated -> show dashboard
   return (
     <div className="h-screen flex flex-col overflow-hidden">
       <Header />
